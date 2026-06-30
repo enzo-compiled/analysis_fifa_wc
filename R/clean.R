@@ -17,3 +17,6 @@ wcmatches <- wcmatches %>% mutate(
   goals_per_match = home_score + away_score,
   empate = outcome == "D"
 )
+
+saveRDS(worldcups, "data/processed/worldcups.rds")
+saveRDS(wcmatches, "data/processed/wcmatches.rds")

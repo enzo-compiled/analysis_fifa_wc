@@ -15,7 +15,15 @@ worldcups <- worldcups %>% mutate(
 
 wcmatches <- wcmatches %>% mutate(
   goals_per_match = home_score + away_score,
-  empate = outcome == "D"
+  empate = outcome == "D",
+  win_conditions = ifelse(
+    is.na(win_conditions), "Regular", win_conditions
+  ),
+  stage_type = case_when(
+    grepl("Group", stage) ~ "Group Stage",
+    stage == "Final" ~ "Final",
+    TRUE ~ "Knockout"
+  )
 )
 
 saveRDS(worldcups, "data/processed/worldcups.rds")

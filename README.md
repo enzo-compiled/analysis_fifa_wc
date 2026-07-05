@@ -60,4 +60,5 @@ make all
 | `make eda` | Análisis exploratorio |
 | `make model` | Modelado |
 | `make report` | Renderiza informe |
+
 El reporte es almacenado en el directorio `reporte` con formato html.

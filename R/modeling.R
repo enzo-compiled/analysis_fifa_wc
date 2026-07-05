@@ -4,6 +4,7 @@ library(nnet)
 library(MASS)       
 library(glmnet)     
 library(caret)
+source("R/utils.R")
 
 set.seed(123)
 wcmatches <- readRDS("data/processed/wcmatches.rds")
@@ -47,12 +48,12 @@ confusionMatrix(as.factor(pred_ridge), test$outcome)
 confusionMatrix(as.factor(pred_lasso), test$outcome)
 
 
-acc <- data.frame(
-  Modelo   = c("StepAIC", "Ridge", "Lasso"),
-  Accuracy = c(
-    mean(pred_step  == test$outcome),
-    mean(pred_ridge == test$outcome),
-    mean(pred_lasso == test$outcome)
+acc <- tabla_modelos(
+  modelos    = c("StepAIC", "Ridge", "Lasso"),
+  accuracies = c(
+    calc_accuracy(pred_step,  test$outcome),
+    calc_accuracy(pred_ridge, test$outcome),
+    calc_accuracy(pred_lasso, test$outcome)
   )
 )
 acc

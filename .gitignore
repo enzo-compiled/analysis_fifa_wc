@@ -4,4 +4,6 @@
 .RData
 .Ruserdata
 output/plots/*.png
+report/*.html
+report/*.pdf
 

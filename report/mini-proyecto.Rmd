@@ -1,0 +1,108 @@
+---
+title: "Análisis Histórico de la Copa del Mundo FIFA (1930–2018)"
+subtitle: "Proyecto Individual — COM4602"
+author: "Enzo Vásquez"
+date: "2026"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    theme: readable
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  fig.width = 8,
+  fig.height = 5
+)
+knitr::opts_knit$set(root.dir = normalizePath(".."))
+```
+
+# Descripción del proyecto
+
+El proyecto analiza datos históricos de la Copa del Mundo FIFA (1930–2018) obtenidos desde TidyTuesday. Se aplican técnicas de análisis exploratorio y modelado predictivo multinomial/logístico para predecir el resultado de un partido (`outcome`: Home/Away/Draw).
+
+
+# Carga y limpieza de datos
+
+```{r load}
+source("R/load.R")
+source("R/clean.R")
+```
+
+## Datos cargados
+
+```{r glimpse}
+glimpse(worldcups)
+glimpse(wcmatches)
+```
+
+# Análisis exploratorio
+
+```{r eda, fig.cap="Plots EDA"}
+source("R/eda.R")
+```
+
+## Evolución de goles por torneo
+```{r plot1}
+p1
+```
+
+## Top 10 selecciones con más victorias
+```{r plot2}
+p2
+```
+
+## Países con más títulos
+```{r plot3}
+p3
+```
+
+## Top 5 rivalidades
+```{r plot4}
+p4
+```
+
+## Distribución de goles por fase
+```{r plot5}
+p5
+```
+
+## Asistencia vs goles promedio por mundial
+```{r plot6}
+p6
+```
+
+# Modelado predictivo
+
+Se predice `outcome` (H/A/D) usando regresión logística multinomial. Se comparan tres enfoques: StepAIC, Ridge y Lasso.
+
+```{r modeling, results='hide'}
+source("R/modeling.R")
+```
+
+## Partición de datos
+
+- **Train:** 70% (`r nrow(train)` observaciones)
+- **Test:** 30% (`r nrow(test)` observaciones)
+```{r particion}
+table(train$outcome)
+table(test$outcome)
+
+prop.table(table(train$outcome)) %>% round(3)
+prop.table(table(test$outcome)) %>% round(3)
+```
+La clase dominante es `H` (victoria local), reflejando ventaja de local histórica en mundiales. Las clases están distribuidas de forma similar entre train y test, lo que valida la partición.
+
+## Resultados
+
+```{r results}
+acc
+```
+El modelo con mayor accuracy es `StepAIC`. Ridge y Lasso aplican regularización sobre los coeficientes del multinomial, penalizando variables poco informativas. StepAIC selecciona variables por criterio AIC desde el modelo nulo. La variable `home_score` y `away_score` son los predictores más influyentes dado que determinan directamente el outcome.

@@ -1,6 +1,7 @@
 library(readr)
 library(dplyr)
 library(ggplot2)
+source("R/utils.R")
 
 worldcups <- readRDS("data/processed/worldcups.rds")
 wcmatches <- readRDS("data/processed/wcmatches.rds")
@@ -12,7 +13,7 @@ p1 <- worldcups %>%
   geom_line() +
   geom_point() +
   labs(title = "Goles promedio por partido por Mundial",
-       x = "Año", y = "Goles por partido")
+       x = "Año", y = "Goles por partido") + tema_fifa()
 ggsave("output/plots/goals_per_game.png", p1)
 
 p2 <- wcmatches %>%
@@ -23,7 +24,7 @@ p2 <- wcmatches %>%
   geom_col(show.legend = FALSE) +
   coord_flip() +
   labs(title = "Top 10 paises con más victorias",
-       x = "Paises", y = "Victorias")
+       x = "Paises", y = "Victorias") + tema_fifa()
 ggsave("output/plots/top_winners_games.png", p2)
 
 p3 <- worldcups %>%
@@ -32,7 +33,7 @@ p3 <- worldcups %>%
   geom_col(show.legend = FALSE) +
   coord_flip() +
   labs(title = "Países con más mundiales",
-       x = "País", y = "Títulos")
+       x = "País", y = "Títulos") + tema_fifa()
 ggsave("output/plots/top_winners_final.png", p3)
 
 p4 <- wcmatches %>%
